@@ -96,3 +96,43 @@ def test_score_rejects_student_and_outcome_from_different_courses(
     )
     assert response.status_code == 400
     assert "same course" in response.json()["detail"]
+
+
+def test_attainment_endpoint_returns_service_result(client: TestClient) -> None:
+    course = client.post(
+        "/api/courses", json={"name": "DBMS", "code": "CS301"}
+    ).json()
+    outcome = client.post(
+        f"/api/courses/{course['id']}/outcomes",
+        json={"code": "CO1", "description": "Understand databases"},
+    ).json()
+    students = []
+    for index, marks in enumerate((40, 50, 60)):
+        student = client.post(
+            f"/api/courses/{course['id']}/students",
+            json={"name": f"Student {index}", "roll_number": f"R{index}"},
+        ).json()
+        students.append(student)
+        client.post(
+            "/api/scores",
+            json={"student_id": student["id"], "co_id": outcome["id"], "marks": marks},
+        )
+
+    response = client.get(f"/api/outcomes/{outcome['id']}/attainment?threshold=50")
+
+    assert response.status_code == 200
+    assert response.json() == {
+        "co_id": outcome["id"],
+        "threshold": 50.0,
+        "total_students": 3,
+        "students_met": 2,
+        "attainment_percentage": 66.67,
+    }
+
+
+def test_attainment_endpoint_returns_404_for_missing_outcome(
+    client: TestClient,
+) -> None:
+    response = client.get("/api/outcomes/999/attainment?threshold=50")
+
+    assert response.status_code == 404

@@ -1,10 +1,12 @@
-from fastapi import APIRouter, Depends, HTTPException, Response, status
+from fastapi import APIRouter, Depends, HTTPException, Query, Response, status
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from app.database import get_db
 from app.models import CourseOutcome
+from app.services.attainment import calculate_attainment_summary
 from app.schemas import (
+    AttainmentResponse,
     CourseOutcomeCreate,
     CourseOutcomeResponse,
     CourseOutcomeUpdate,
@@ -60,6 +62,30 @@ def list_outcomes(course_id: int, db: Session = Depends(get_db)) -> list[CourseO
 @router.get("/outcomes/{co_id}", response_model=CourseOutcomeResponse)
 def get_outcome(co_id: int, db: Session = Depends(get_db)) -> CourseOutcome:
     return get_outcome_or_404(co_id, db)
+
+
+@router.get(
+    "/outcomes/{co_id}/attainment",
+    response_model=AttainmentResponse,
+    summary="Calculate course outcome attainment",
+)
+def get_attainment(
+    co_id: int,
+    threshold: float = Query(..., description="Minimum score that counts as met"),
+    db: Session = Depends(get_db),
+) -> AttainmentResponse:
+    get_outcome_or_404(co_id, db)
+    scores = db.scalars(
+        select(CourseOutcome.scores).where(CourseOutcome.id == co_id)
+    ).all()
+    result = calculate_attainment_summary(scores, threshold)
+    return AttainmentResponse(
+        co_id=co_id,
+        threshold=threshold,
+        total_students=result.total_students,
+        students_met=result.students_met,
+        attainment_percentage=result.attainment_percentage,
+    )
 
 
 @router.put("/outcomes/{co_id}", response_model=CourseOutcomeResponse)

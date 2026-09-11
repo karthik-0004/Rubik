@@ -84,3 +84,11 @@ class ScoreResponse(ScoreBase):
     id: int
     student_id: int
     co_id: int
+
+
+class AttainmentResponse(BaseModel):
+    co_id: int
+    threshold: float
+    total_students: int
+    students_met: int
+    attainment_percentage: float

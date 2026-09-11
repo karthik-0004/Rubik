@@ -99,7 +99,6 @@ STUDENT_NAMES = (
     "Faisal Ahmed",
     "Gayatri Joshi",
     "Himanshu Rawat",
-    "Jhanvi Desai",
 )
 
 
