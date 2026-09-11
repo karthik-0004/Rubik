@@ -31,3 +31,13 @@ A faculty-focused web application foundation for managing courses, course outcom
 > To be completed as implementation progresses.
 
 The backend and frontend dependency manifests are included as the starting point for local development. CRUD workflows, calculation behavior, and their setup commands will be documented when those features are implemented.
+
+### Seed development data
+
+From the `backend` directory, run:
+
+```powershell
+python -m app.seed
+```
+
+This creates three courses, four outcomes per course, 60 students, and 240 scores. Running the command again reports that the complete seed is already present and does not create duplicates.
