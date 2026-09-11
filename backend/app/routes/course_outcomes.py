@@ -71,7 +71,9 @@ def get_outcome(co_id: int, db: Session = Depends(get_db)) -> CourseOutcome:
 )
 def get_attainment(
     co_id: int,
-    threshold: float = Query(..., description="Minimum score that counts as met"),
+    threshold: float = Query(
+        ..., ge=0, allow_inf_nan=False, description="Minimum score that counts as met"
+    ),
     db: Session = Depends(get_db),
 ) -> AttainmentResponse:
     get_outcome_or_404(co_id, db)

@@ -136,3 +136,9 @@ def test_attainment_endpoint_returns_404_for_missing_outcome(
     response = client.get("/api/outcomes/999/attainment?threshold=50")
 
     assert response.status_code == 404
+
+
+def test_attainment_endpoint_rejects_negative_threshold(client: TestClient) -> None:
+    response = client.get("/api/outcomes/999/attainment?threshold=-1")
+
+    assert response.status_code == 422
