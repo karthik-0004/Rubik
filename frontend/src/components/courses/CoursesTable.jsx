@@ -1,7 +1,7 @@
 export default function CoursesTable({ courses, onOpenCourse, onEditCourse, onDeleteCourse }) {
   return (
     <div className="overflow-x-auto border border-slate-200 bg-white">
-      <table className="w-full min-w-[680px] border-collapse text-left text-sm">
+      <table className="w-full min-w-170 border-collapse text-left text-sm">
         <thead className="border-b border-slate-200 bg-slate-50 text-xs uppercase tracking-wide text-slate-500">
           <tr>
             <th className="px-5 py-3 font-semibold">Course</th>

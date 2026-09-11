@@ -27,12 +27,12 @@ test("faculty can edit scores and calculate attainment", async ({ page }) => {
   await page.getByRole("button", { name: "Attainment" }).click();
   await page.getByRole("button", { name: "Calculate attainment" }).click();
   await expect(page.getByText(/%$/).first()).toBeVisible();
-  await expect(page.getByText("80.00%")).toBeVisible();
+  await expect(page.getByText("80.00%", { exact: true }).first()).toBeVisible();
 
   const threshold = page.getByRole("spinbutton", { name: "Threshold" });
   await threshold.fill("60");
   await page.getByRole("button", { name: "Calculate attainment" }).click();
-  await expect(page.getByText("40.00%")).toBeVisible();
+  await expect(page.getByText("40.00%", { exact: true }).first()).toBeVisible();
 
   await page.getByRole("button", { name: "Students & scores" }).click();
   await page.locator('input[aria-label="Rahul Kumar CO1 score"]').fill(originalScore);

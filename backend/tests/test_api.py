@@ -142,3 +142,24 @@ def test_attainment_endpoint_rejects_negative_threshold(client: TestClient) -> N
     response = client.get("/api/outcomes/999/attainment?threshold=-1")
 
     assert response.status_code == 422
+
+
+def test_score_endpoint_rejects_marks_above_100(client: TestClient) -> None:
+    course = client.post(
+        "/api/courses", json={"name": "DBMS", "code": "CS301"}
+    ).json()
+    outcome = client.post(
+        f"/api/courses/{course['id']}/outcomes",
+        json={"code": "CO1", "description": "Understand databases"},
+    ).json()
+    student = client.post(
+        f"/api/courses/{course['id']}/students",
+        json={"name": "Student", "roll_number": "R1"},
+    ).json()
+
+    response = client.post(
+        "/api/scores",
+        json={"student_id": student["id"], "co_id": outcome["id"], "marks": 101},
+    )
+
+    assert response.status_code == 422

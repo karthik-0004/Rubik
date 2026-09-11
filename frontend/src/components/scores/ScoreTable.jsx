@@ -1,7 +1,7 @@
 export default function ScoreTable({ students, outcomes, values, onChange }) {
   return (
     <div className="overflow-x-auto border border-slate-200 bg-white">
-      <table className="w-full min-w-[780px] border-collapse text-left text-sm">
+      <table className="w-full min-w-195 border-collapse text-left text-sm">
         <thead className="sticky top-0 z-10 border-b border-slate-200 bg-slate-50 text-xs uppercase tracking-wide text-slate-500">
           <tr>
             <th className="sticky left-0 z-20 min-w-56 border-r border-slate-200 bg-slate-50 px-5 py-3 font-semibold">
@@ -17,7 +17,7 @@ export default function ScoreTable({ students, outcomes, values, onChange }) {
         <tbody className="divide-y divide-slate-100">
           {students.map((student) => (
             <tr className="hover:bg-slate-50" key={student.id}>
-              <th className="sticky left-0 z-[1] border-r border-slate-200 bg-white px-5 py-3 text-left font-medium text-slate-800">
+              <th className="sticky left-0 z-1 border-r border-slate-200 bg-white px-5 py-3 text-left font-medium text-slate-800">
                 <span className="block">{student.name}</span>
                 <span className="mt-1 block font-mono text-[11px] font-normal text-slate-500">
                   {student.rollNumber}

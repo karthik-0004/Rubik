@@ -1,7 +1,7 @@
 export default function OutcomeTable({ outcomes, onEdit, onDelete }) {
   return (
     <div className="overflow-x-auto border border-slate-200 bg-white">
-      <table className="w-full min-w-[620px] border-collapse text-left text-sm">
+      <table className="w-full min-w-155 border-collapse text-left text-sm">
         <thead className="border-b border-slate-200 bg-slate-50 text-xs uppercase tracking-wide text-slate-500">
           <tr>
             <th className="w-28 px-5 py-3 font-semibold">Code</th>
