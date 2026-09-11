@@ -1,5 +1,5 @@
 import pytest
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, select
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 from sqlalchemy.pool import StaticPool
@@ -68,3 +68,22 @@ def test_negative_marks_are_rejected(session: Session) -> None:
     session.add(Score(student_id=student.id, co_id=outcome.id, marks=-1))
     with pytest.raises(IntegrityError):
         session.commit()
+
+
+def test_deleting_course_cascades_to_dependents(session: Session) -> None:
+    course = Course(code="CS304", name="Software Design")
+    outcome = CourseOutcome(code="CO1", description="Understand software design")
+    student = Student(roll_number="23R01A0504", name="Dev")
+    course.outcomes.append(outcome)
+    course.students.append(student)
+    session.add(course)
+    session.flush()
+    session.add(Score(student_id=student.id, co_id=outcome.id, marks=90))
+    session.commit()
+
+    session.delete(course)
+    session.commit()
+
+    assert session.scalars(select(CourseOutcome)).all() == []
+    assert session.scalars(select(Student)).all() == []
+    assert session.scalars(select(Score)).all() == []
