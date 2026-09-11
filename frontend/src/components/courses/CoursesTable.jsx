@@ -1,4 +1,4 @@
-export default function CoursesTable({ courses, onOpenCourse }) {
+export default function CoursesTable({ courses, onOpenCourse, onEditCourse, onDeleteCourse }) {
   return (
     <div className="overflow-x-auto border border-slate-200 bg-white">
       <table className="w-full min-w-[680px] border-collapse text-left text-sm">
@@ -25,6 +25,12 @@ export default function CoursesTable({ courses, onOpenCourse }) {
                   type="button"
                 >
                   Open course
+                </button>
+                <button className="ml-4 text-sm font-medium text-slate-600 hover:text-slate-950" onClick={() => onEditCourse(course)} type="button">
+                  Edit
+                </button>
+                <button className="ml-4 text-sm font-medium text-red-700 hover:text-red-900" onClick={() => onDeleteCourse(course)} type="button">
+                  Delete
                 </button>
               </td>
             </tr>

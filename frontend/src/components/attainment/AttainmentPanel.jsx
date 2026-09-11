@@ -1,4 +1,13 @@
-export default function AttainmentPanel({ outcomes }) {
+import { useState } from "react";
+
+export default function AttainmentPanel({ outcomes, onCalculate, results, loading, error }) {
+  const [threshold, setThreshold] = useState("50");
+
+  function calculate(event) {
+    event.preventDefault();
+    onCalculate(threshold);
+  }
+
   return (
     <section aria-labelledby="attainment-heading" className="border border-slate-200 bg-white">
       <div className="flex flex-col gap-4 border-b border-slate-200 px-5 py-4 sm:flex-row sm:items-end sm:justify-between">
@@ -10,16 +19,17 @@ export default function AttainmentPanel({ outcomes }) {
             Results will be calculated from the backend for the selected threshold.
           </p>
         </div>
-        <label className="flex items-center gap-3 text-sm text-slate-700">
-          <span>Threshold</span>
-          <input
+        <form className="flex flex-wrap items-center gap-3 text-sm text-slate-700" onSubmit={calculate}>
+          <label className="flex items-center gap-3"> <span>Threshold</span><input
             className="h-9 w-20 border border-slate-300 px-2 text-center outline-none focus:border-teal-700 focus:ring-2 focus:ring-teal-100"
-            defaultValue="50"
+            onChange={(event) => setThreshold(event.target.value)}
+            value={threshold}
             min="0"
             type="number"
-          />
+          /></label>
           <span className="text-slate-500">marks</span>
-        </label>
+          <button className="bg-slate-900 px-3 py-2 font-medium text-white hover:bg-slate-700 disabled:opacity-50" disabled={loading} type="submit">{loading ? "Calculating..." : "Calculate attainment"}</button>
+        </form>
       </div>
       <div className="overflow-x-auto">
         <table className="w-full min-w-[520px] border-collapse text-left text-sm">
@@ -31,11 +41,11 @@ export default function AttainmentPanel({ outcomes }) {
             </tr>
           </thead>
           <tbody className="divide-y divide-slate-100">
-            {outcomes.map((outcome) => (
+            {error ? <tr><td className="px-5 py-4 text-red-700" colSpan="3">{error}</td></tr> : outcomes.length === 0 ? <tr><td className="px-5 py-4 text-slate-500" colSpan="3">No Course Outcomes have been added.</td></tr> : outcomes.map((outcome) => (
               <tr key={outcome.code}>
                 <td className="px-5 py-4 font-mono text-xs font-semibold text-slate-700">{outcome.code}</td>
                 <td className="px-5 py-4 text-slate-700">{outcome.description}</td>
-                <td className="px-5 py-4 text-right text-slate-500">Not calculated</td>
+                <td className="px-5 py-4 text-right text-slate-700">{results[outcome.id] ? `${results[outcome.id].attainment_percentage.toFixed(2)}%` : "Not calculated"}</td>
               </tr>
             ))}
           </tbody>

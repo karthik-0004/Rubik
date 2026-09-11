@@ -1,4 +1,4 @@
-export default function OutcomeTable({ outcomes }) {
+export default function OutcomeTable({ outcomes, onEdit, onDelete }) {
   return (
     <div className="overflow-x-auto border border-slate-200 bg-white">
       <table className="w-full min-w-[620px] border-collapse text-left text-sm">
@@ -17,10 +17,10 @@ export default function OutcomeTable({ outcomes }) {
               </td>
               <td className="px-5 py-4 text-slate-700">{outcome.description}</td>
               <td className="px-5 py-4 text-right">
-                <button className="mr-4 text-sm font-medium text-slate-600 hover:text-slate-950" type="button">
+                <button className="mr-4 text-sm font-medium text-slate-600 hover:text-slate-950" onClick={() => onEdit(outcome)} type="button">
                   Edit
                 </button>
-                <button className="text-sm font-medium text-red-700 hover:text-red-900" type="button">
+                <button className="text-sm font-medium text-red-700 hover:text-red-900" onClick={() => onDelete(outcome)} type="button">
                   Delete
                 </button>
               </td>
