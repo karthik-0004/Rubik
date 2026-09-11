@@ -64,7 +64,7 @@ class StudentResponse(StudentBase):
 
 
 class ScoreBase(BaseModel):
-    marks: float = Field(ge=0)
+    marks: float = Field(ge=0, le=100)
 
 
 class ScoreCreate(ScoreBase):
@@ -75,7 +75,7 @@ class ScoreCreate(ScoreBase):
 class ScoreUpdate(BaseModel):
     student_id: int | None = None
     co_id: int | None = None
-    marks: float | None = Field(default=None, ge=0)
+    marks: float | None = Field(default=None, ge=0, le=100)
 
 
 class ScoreResponse(ScoreBase):

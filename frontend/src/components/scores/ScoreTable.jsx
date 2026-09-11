@@ -33,6 +33,7 @@ export default function ScoreTable({ students, outcomes, values, onChange }) {
                     value={values[`${student.id}-${outcome.id}`]?.marks ?? ""}
                     inputMode="decimal"
                     min="0"
+                    max="100"
                     type="number"
                   />
                 </td>
