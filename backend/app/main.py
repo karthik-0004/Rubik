@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 
+from app.database import init_db
 from app.routes.health import router as health_router
 
 app = FastAPI(
@@ -9,3 +10,8 @@ app = FastAPI(
 )
 
 app.include_router(health_router, prefix="/api")
+
+
+@app.on_event("startup")
+def initialize_database() -> None:
+    init_db()
